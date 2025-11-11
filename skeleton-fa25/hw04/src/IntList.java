@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.In;
+
 public class IntList {
     int first;
     IntList rest;
@@ -43,7 +45,12 @@ public class IntList {
      */
     public static IntList incrRecursiveNondestructive(IntList L, int x) {
         // TODO: Fill in this code
-        return null;
+
+        if (L == null) {
+            return null;
+        }
+
+        return new IntList(L.first + x,incrRecursiveNondestructive(L.rest, x));
     }
 
     /**
@@ -53,7 +60,13 @@ public class IntList {
      */
     public static IntList incrRecursiveDestructive(IntList L, int x) {
         // TODO: Fill in this code
-        return null;
+        if (L == null) {
+            return null;
+        }
+        L.first += x;
+        incrRecursiveDestructive(L.rest, x);
+
+        return L;
     }
 
     /**
@@ -63,7 +76,16 @@ public class IntList {
      */
     public static IntList incrIterativeNondestructive(IntList L, int x) {
         // TODO: Fill in this code
-        return null;
+        IntList head = new IntList(L.first + x, null);
+        IntList Q = head;
+
+        while (L.rest != null) {
+            L = L.rest;
+            Q.rest = new IntList(L.first + x, null);
+            Q = Q.rest;
+        }
+
+        return head;
     }
 
     /**
@@ -74,7 +96,14 @@ public class IntList {
      */
     public static IntList incrIterativeDestructive(IntList L, int x) {
         // TODO: Fill in this code
-        return null;
+        IntList p = L;
+
+        while (p != null) {
+            p.first += x;
+            p = p.rest;
+        }
+
+        return L;
     }
 
     /**
@@ -83,7 +112,28 @@ public class IntList {
      */
     public static IntList concatenate(IntList L1, IntList L2) {
         // TODO: Fill in this code
-        return null;
+
+        // 1. 直接修改的方法，不稳健，有例外，易出问题
+//        IntList p = L1;
+//
+//        if (L1 == null) {
+//            return L2;
+//        }
+//
+//        while (p.rest != null) {
+//            p = p.rest;
+//        }
+//
+//        p.rest = L2;
+//
+//        return L1;
+
+        // 2. 递归，稳健，简洁
+        if (L1 == null) {
+            return L2;
+        }
+
+        return new IntList(L1.first, concatenate(L1.rest, L2));
     }
 
     /*
@@ -97,7 +147,12 @@ public class IntList {
      */
     public int sum() {
         // Optional: Fill in this code
-        return 0;
+
+        if (rest == null) {
+            return first;
+        }
+
+        return first + this.rest.sum();
     }
 
     /**
@@ -105,6 +160,11 @@ public class IntList {
      */
     public void addLast(int x) {
         // Optional: Fill in this code
+        if (rest == null) {
+            rest = new IntList(x, null);
+            return;
+        }
+        this.rest.addLast(x);
     }
 
     /**
@@ -115,5 +175,8 @@ public class IntList {
      */
     public void addFirst(int x) {
         // Optional: Fill in this code
+        IntList newInt = new IntList(first, rest);
+        this.first = x;
+        this.rest = newInt;
     }
 }
