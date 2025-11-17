@@ -1,9 +1,31 @@
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class LinkedListDeque61B<T> implements Deque61B<T> {
+    private class Node {
+        public T item;
+        public Node prev;
+        public Node next;
+
+        Node (T i, Node p, Node n) {
+            item = i;
+            prev = p;
+            next = n;
+        }
+    }
+
+    int size;
+    Node sentF;
+    Node sentL;
 
     public LinkedListDeque61B() {
-
+        size = 0;
+        sentF = new Node(null, null, null);
+        sentL = new Node(null, null, null);
+        sentF.next = sentL;
+        sentL.prev = sentF;
     }
 
     /**
@@ -13,7 +35,11 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public void addFirst(T x) {
-
+        Node oldNode = sentF.next;
+        Node newNode = new Node(x, sentF, sentF.next);
+        sentF.next = newNode;
+        oldNode.prev = newNode;
+        size = size + 1;
     }
 
     /**
@@ -23,7 +49,11 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public void addLast(T x) {
-
+        Node oldNode = sentL.prev;
+        Node newNode = new Node(x, sentL.prev, sentF);
+        sentL.prev = newNode;
+        oldNode.next = newNode;
+        size = size + 1;
     }
 
     /**
@@ -33,7 +63,19 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public List<T> toList() {
-        return List.of();
+        if (size == 0) {
+            return new ArrayList<>();
+        }
+
+        List<T> returnList = new ArrayList<>();
+        Node p = sentF.next;
+
+        for(int i = 0; i < size; i++) {
+            returnList.add(p.item);
+            p = p.next;
+        }
+
+        return returnList;
     }
 
     /**
@@ -43,7 +85,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     /**
@@ -53,7 +95,7 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     /**
@@ -63,6 +105,15 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public T removeFirst() {
+        if (!isEmpty()) {
+            Node d = sentF.next;
+            sentF.next = sentF.next.next;
+            sentF.next.prev = sentF;
+            size = size - 1;
+
+            return d.item;
+        }
+
         return null;
     }
 
@@ -73,6 +124,14 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public T removeLast() {
+        if (!isEmpty()) {
+            Node d = sentL.prev;
+            sentL.prev = sentL.prev.prev;
+            sentL.prev.next = sentL;
+            size = size - 1;
+
+            return d.item;
+        }
         return null;
     }
 
@@ -87,6 +146,13 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public T get(int index) {
+        Node p = sentF.next;
+        if(index < size) {
+            for(int i = 0; i <= index; i++) {
+                p = p.next;
+            }
+            return p.item;
+        }
         return null;
     }
 
@@ -100,6 +166,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public T getRecursive(int index) {
+
+
         return null;
     }
 
@@ -108,5 +176,6 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         lld.addLast(0);
         lld.addLast(1);
         lld.addFirst(-1);
+        System.out.println(lld.toList());
     }
 }
