@@ -146,8 +146,8 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
      */
     @Override
     public T get(int index) {
-        Node p = sentF.next;
-        if(index < size) {
+        Node p = sentF;
+        if (index < size && index >= 0) {
             for(int i = 0; i <= index; i++) {
                 p = p.next;
             }
@@ -156,6 +156,12 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
         return null;
     }
 
+    private T getRecursiveHelp(int i, Node first) {
+        if (i == 0) {
+            return first.item;
+        }
+        return getRecursiveHelp(i - 1, first.next);
+    }
     /**
      * This method technically shouldn't be in the interface, but it's here
      * to make testing nice. Gets an element, recursively. Returns null if
@@ -167,6 +173,9 @@ public class LinkedListDeque61B<T> implements Deque61B<T> {
     @Override
     public T getRecursive(int index) {
 
+        if (index < size && index >= 0) {
+            return getRecursiveHelp(index, sentF.next);
+        }
 
         return null;
     }

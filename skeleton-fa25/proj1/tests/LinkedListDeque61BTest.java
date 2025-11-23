@@ -57,4 +57,70 @@ public class LinkedListDeque61BTest {
      }
 
     // Below, you'll write your own tests for LinkedListDeque61B.
+    @Test
+    /** This test verifies isEmpty and size calls **/
+    public void isEmptyAndSizeTest() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+
+        assertThat(lld1.isEmpty()).isTrue();
+        assertThat(lld1.size()).isEqualTo(0);
+
+        lld1.addFirst("front");
+        lld1.addLast("back");
+        assertThat(lld1.isEmpty()).isFalse();
+        assertThat(lld1.size()).isEqualTo(2);
+
+        lld1.removeFirst();
+        lld1.removeFirst();
+        assertThat(lld1.size()).isEqualTo(0);
+    }
+
+    @Test
+    /** This test verifies get function **/
+    public void getTest() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+
+        lld1.addLast("front");
+        lld1.addLast("middle");
+        lld1.addLast("back");
+
+        assertThat(lld1.get(-1)).isEqualTo(null);
+        assertThat(lld1.get(50)).isEqualTo(null);
+        assertThat(lld1.get(0)).isEqualTo("front");
+        assertThat(lld1.get(1)).isEqualTo("middle");
+    }
+
+    @Test
+    /** This test verifies getRecursive function **/
+    public void getRecursiveTest() {
+        Deque61B<String> lld1 = new LinkedListDeque61B<>();
+
+        lld1.addLast("front");
+        lld1.addLast("middle");
+        lld1.addLast("back");
+
+        assertThat(lld1.get(-1)).isEqualTo(null);
+        assertThat(lld1.get(50)).isEqualTo(null);
+        assertThat(lld1.get(0)).isEqualTo("front");
+        assertThat(lld1.get(1)).isEqualTo("middle");
+    }
+
+    @Test
+    /** This test verifies removeFirst and removeLast **/
+    public void removeFirstAndRemoveLastTest() {
+        Deque61B<Integer> lld1 = new LinkedListDeque61B<>();
+
+        lld1.addLast(0);   // [0]
+        lld1.addLast(1);   // [0, 1]
+        lld1.addFirst(-1); // [-1, 0, 1]
+        lld1.removeFirst();
+        assertThat(lld1.toList()).containsExactly(0, 1).inOrder();
+        lld1.removeLast();
+        assertThat(lld1.toList()).containsExactly(0).inOrder();
+
+        /** If Deque61B is empty, removing should return null **/
+        lld1.removeLast();
+        assertThat(lld1.removeLast()).isEqualTo(null);
+        assertThat(lld1.removeFirst()).isEqualTo(null);
+    }
 }
