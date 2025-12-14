@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class PercolationTest {
@@ -81,8 +82,49 @@ public class PercolationTest {
     // TODO: Using the given tests above as a template,
     //       write some more tests and delete the fail() line
     @Test
-    public void yourFirstTestHere() {
-        fail("Did you write your own tests?");
+    public void testBackwashSolution() {
+        int N = 3;
+        Percolation p = new Percolation(N);
+        int [][] openSites = {
+                {0, 0},
+                {1, 0},
+                {2, 0},
+                {2, 2}
+        };
+        Cell[][] expectedState = {
+                {Cell.FULL, Cell.CLOSED, Cell.CLOSED},
+                {Cell.FULL, Cell.CLOSED, Cell.CLOSED},
+                {Cell.FULL, Cell.CLOSED, Cell.OPEN}
+        };
+        for (int[] site : openSites) {
+            p.open(site[0], site[1]);
+        }
+        assertThat(getState(N, p)).isEqualTo(expectedState);
+        assertThat(p.percolates()).isTrue();
     }
 
+    @Test
+    public void testReopeningSite() {
+        int N = 3;
+        Percolation p = new Percolation(N);
+        p.open(0, 0);
+        p.open(0, 0);
+        assertThat(p.numOfOpenSites).isEqualTo(1);
+    }
+
+    @Test
+    public void testIllegalArgument() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Percolation p = new Percolation(-1);
+        });
+    }
+
+    @Test
+    public void testInvalidIndices() {
+        int N = 1;
+        Percolation p = new Percolation(N);
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            p.open(-1, 0);
+        });
+    }
 }
