@@ -51,6 +51,9 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     void flipColors(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
+        node.right.isBlack = !node.right.isBlack;
+        node.left.isBlack = !node.left.isBlack;
+        node.isBlack = !node.isBlack;
     }
 
     /**
@@ -62,7 +65,14 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode<T> a = node.left;
+        node.left = a.right;
+        a.right = node;
+
+        a.isBlack = node.isBlack;
+        node.isBlack = false;
+
+        return a;
     }
 
     /**
@@ -74,7 +84,14 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode<T> b = node.right;
+        node.right = b.left;
+        b.left = node;
+
+        b.isBlack = node.isBlack;
+        node.isBlack = false;
+
+        return b;
     }
 
     /**
@@ -106,16 +123,36 @@ public class RedBlackTree<T extends Comparable<T>> {
      */
     private RBTreeNode<T> insertHelper(RBTreeNode<T> node, T item) {
         // TODO: Insert (return) new red leaf node.
+        RBTreeNode<T> newNode = new RBTreeNode<>(false, item, null, null);
 
         // TODO: Handle normal binary search tree insertion.
+        if (node == null) {
+            return newNode;
+        }
+
+        int comp = item.compareTo(node.item);
+        if (comp < 0) {
+            node.left = insertHelper(node.left, item);
+        } else if (comp > 0) {
+            node.right = insertHelper(node.right, item);
+        }
 
         // TODO: Rotate left operation
+        if (isRed(node.right) && !isRed(node.left)) {
+            node = rotateLeft(node);
+        }
 
         // TODO: Rotate right operation
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateRight(node);
+        }
 
         // TODO: Color flip
+        if (isRed(node.left) && isRed(node.right)) {
+            flipColors(node);
+        }
 
-        return null; //fix this return statement
+        return node; //fix this return statement
     }
 
 }

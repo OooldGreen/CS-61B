@@ -34,7 +34,7 @@ public class TestRedBlackTree {
         node1.left = node2;
         node2.left = node3;
 
-        RedBlackTree.RBTreeNode<Integer> newRoot = rbtree.rotateRight(node1);
+        RedBlackTree. RBTreeNode<Integer> newRoot = rbtree.rotateRight(node1);
         assertThat(newRoot.item).isEqualTo(9);
         assertThat(newRoot.right.item).isEqualTo(10);
         assertThat(newRoot.left.item).isEqualTo(8);
@@ -52,7 +52,7 @@ public class TestRedBlackTree {
 
 
         rbtree.insert(10);
-        
+
         /*
         LLRB Tree representation:
            (10)
@@ -356,7 +356,7 @@ public class TestRedBlackTree {
         assertWithMessage("Number of Calls to Flip Colors after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToFlipColors).isEqualTo(4);
         assertWithMessage("Number of Calls to Rotate Left after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateLeft).isEqualTo(3);
         assertWithMessage("Number of Calls to Rotate Right after inserting (5, 11, 3, 9, 7, 1, 2) in order").that(callsToRotateRight).isEqualTo(4);
-        
+
     }
 
     @Test
