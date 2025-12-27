@@ -60,4 +60,31 @@ public class TimeSeriesTest {
         assertThat(totalPopulation.years()).isEmpty();
         assertThat(totalPopulation.data()).isEmpty();
     }
+
+    @Test
+    public void testDividedBy() {
+        TimeSeries catPopulation = new TimeSeries();
+        catPopulation.put(1991, 0.0);
+        catPopulation.put(1992, 100.0);
+        catPopulation.put(1994, 200.0);
+
+        TimeSeries dogPopulation = new TimeSeries();
+        dogPopulation.put(1991, 100.0);
+        dogPopulation.put(1992, 100.0);
+        dogPopulation.put(1994, 500.0);
+        dogPopulation.put(1995, 300.0);
+
+        TimeSeries dividedPopulation = catPopulation.dividedBy(dogPopulation);
+
+        List<Double> dividedList = new ArrayList<>();
+        dividedList.add(0.0);
+        dividedList.add(1.0);
+        dividedList.add(0.4);
+
+        for (int i = 0; i < dividedList.size(); i += 1) {
+            assertThat(dividedPopulation.data().get(i)).isWithin(1E-10).of(dividedList.get(i));
+        }
+
+
+    }
 } 
