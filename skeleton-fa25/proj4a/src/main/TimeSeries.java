@@ -31,7 +31,6 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
-        // TODO: Fill in this constructor.
         if (startYear >= MIN_YEAR && endYear <= MAX_YEAR) {
             for (Integer year : ts.keySet()) {
                 if (year >= startYear && year <= endYear) {
@@ -45,7 +44,6 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      *  Returns all years for this time series in ascending order.
      */
     public List<Integer> years() {
-        // TODO: Fill in this method.
         return this.isEmpty() ? new ArrayList<>() : new ArrayList<>(this.keySet());
     }
 
@@ -54,7 +52,6 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      *  order of years().
      */
     public List<Double> data() {
-        // TODO: Fill in this method.
         return this.isEmpty() ? new ArrayList<>() : new ArrayList<>(this.values());
     }
 
@@ -68,7 +65,6 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * should store the value from the TimeSeries that contains that year.
      */
     public TimeSeries plus(TimeSeries ts) {
-        // TODO: Fill in this method.
         TimeSeries plusTs = new TimeSeries();
 
         if (ts.isEmpty() && this.isEmpty()) {
@@ -82,7 +78,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
         }
 
         for (Integer year : this.keySet()) {
-           plusTs.put(year, this.get(year));
+            plusTs.put(year, this.get(year));
         }
 
         for (Integer year : ts.keySet()) {
@@ -105,19 +101,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      * If TS has a year that is not in this TimeSeries, ignore it.
      */
     public TimeSeries dividedBy(TimeSeries ts) {
-        // TODO: Fill in this method.
         TimeSeries dividedTs = new TimeSeries();
 
         for (Integer year : this.keySet()) {
             if (!ts.containsKey(year)) {
                 throw new IllegalArgumentException();
             }
-            dividedTs.put(year, this.get(year)/ts.get(year));
+            dividedTs.put(year, this.get(year) / ts.get(year));
         }
 
         return dividedTs;
     }
-
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
 }

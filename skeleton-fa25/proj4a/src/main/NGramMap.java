@@ -1,8 +1,6 @@
 package main;
 
 import edu.princeton.cs.algs4.In;
-
-import java.sql.Time;
 import java.util.*;
 
 import static main.TimeSeries.MAX_YEAR;
@@ -20,7 +18,6 @@ import static main.TimeSeries.MIN_YEAR;
  */
 public class NGramMap {
 
-    // TODO: Add any necessary static/instance variables.
     List<WordMap> wordList = new ArrayList<>();
     TimeSeries yearList = new TimeSeries();
 
@@ -28,7 +25,6 @@ public class NGramMap {
      * Constructs an NGramMap from WORDHISTORYFILENAME and YEARHISTORYFILENAME.
      */
     public NGramMap(String wordHistoryFilename, String yearHistoryFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
         In wordHistoryFile = new In(wordHistoryFilename);
         In yearHistoryFile = new In(yearHistoryFilename);
 
@@ -44,7 +40,6 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
         WordMap fw = findWord(word);
         if (fw != null) {
             TimeSeries tempTs = fw.ts;
@@ -60,7 +55,6 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        // TODO: Fill in this method.
         WordMap fw = findWord(word);
 
         if (fw != null) {
@@ -74,7 +68,6 @@ public class NGramMap {
      * Returns a defensive copy of the total number of words recorded per year in all volumes.
      */
     public TimeSeries totalCountHistory() {
-        // TODO: Fill in this method.
         return yearList;
     }
 
@@ -87,7 +80,6 @@ public class NGramMap {
      * relative frequency = number of this word in that year / total number of words in that year
      * **/
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
         TimeSeries resultTs = new TimeSeries();
         WordMap fw = findWord(word);
         if (fw != null) {
@@ -104,7 +96,6 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        // TODO: Fill in this method.
         TimeSeries resultTs = new TimeSeries();
         WordMap fw = findWord(word);
         if (fw != null) {
@@ -125,14 +116,13 @@ public class NGramMap {
      * **/
     public TimeSeries summedWeightHistory(Collection<String> words,
                                           int startYear, int endYear) {
-        // TODO: Fill in this method.
         TimeSeries wordTs = new TimeSeries();
         TimeSeries yearTs = new TimeSeries(yearList, startYear, endYear);
 
         for (WordMap wordMap : wordList) {
-           if(words.contains(wordMap.word)) {
-               wordTs = wordTs.plus(wordMap.ts);
-           }
+            if (words.contains(wordMap.word)) {
+                wordTs = wordTs.plus(wordMap.ts);
+            }
         }
         wordTs = new TimeSeries(wordTs, startYear, endYear);
 
@@ -144,11 +134,10 @@ public class NGramMap {
      * exist in this time frame, ignore it rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-        // TODO: Fill in this method.
         TimeSeries wordTs = new TimeSeries();
 
         for (WordMap wordMap : wordList) {
-            if(words.contains(wordMap.word)) {
+            if (words.contains(wordMap.word)) {
                 wordTs = wordTs.plus(wordMap.ts);
             }
         }
@@ -156,15 +145,16 @@ public class NGramMap {
         return wordTs.dividedBy(yearList);
     }
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
+    /**
+     * My private method
+     * **/
     /**
      * 处理 yearFile，返回一个 TimeSeries
      * 第一列是 year，第二列是 对应年份 total number of words recorded
      * 时间复杂度：O(n)
      * **/
     private void splitYearFile(In file) {
-        while(!file.isEmpty()) {
+        while (!file.isEmpty()) {
             String[] line = file.readLine().split(",");
             yearList.put(Integer.parseInt(line[0]), Double.parseDouble(line[1]));
         }
@@ -180,17 +170,17 @@ public class NGramMap {
         }
     }
 
-     private static class Data {
+    private static class Data {
         String word;
         Integer year;
         Double data;
 
-        Data (String word, Integer year, Double data) {
+        Data(String word, Integer year, Double data) {
             this.word = word;
             this.year = year;
             this.data = data;
         }
-     }
+    }
 
     /**
      * 处理 wordFile
@@ -203,13 +193,12 @@ public class NGramMap {
      * **/
     private void splitWordFile(In file) {
         List<Data> list = new ArrayList<>();
-        while(!file.isEmpty()) {
+        while (!file.isEmpty()) {
             String[] line = file.readLine().split("\t");
             Data data = new Data(line[0], Integer.parseInt(line[1]), Double.parseDouble(line[2]));
             list.add(data);
         }
-        list.sort(Comparator.comparing((Data d) -> d.word)
-                .thenComparingInt(d -> d.year));
+        list.sort(Comparator.comparing((Data d) -> d.word).thenComparingInt(d -> d.year));
         addDataToWordList(list);
     }
 
@@ -218,7 +207,7 @@ public class NGramMap {
         TimeSeries currentTs = null;
 
         for (Data d : list) {
-            if(!d.word.equals(currentWord)) {
+            if (!d.word.equals(currentWord)) {
                 currentWord = d.word;
                 currentTs = new TimeSeries();
                 currentTs.put(d.year, d.data);
