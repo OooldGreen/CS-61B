@@ -1,10 +1,13 @@
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
+import edu.princeton.cs.algs4.In;
+import main.HyponymsHandler;
+import main.NGramMap;
+import main.WordNet;
 import org.junit.jupiter.api.Test;
 import main.AutograderBuddy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -46,4 +49,59 @@ public class TestOneWordK0Hyponyms {
     }
 
     // TODO: Add more unit tests (including edge case tests) here.
+    @Test
+    public void test() {
+        WordNet wn = new WordNet(SYNSETS_EECS_FILE, HYPONYMS_EECS_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_EECS_FILE, YEAR_HISTORY_FILE);
+        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+
+
+
+    }
+
+//    @Test
+//    public void testReversal() {
+//        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+//        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+//        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+//
+//        assertThat(handler.traversalBFS("aimer")).isEqualTo(null);
+//
+//        Set<Integer> ids = handler.traversalBFS("change");
+//        Set<Integer> result = Set.of(2, 3, 4, 5, 8, 9, 10);
+//        assertThat(ids).isEqualTo(result);
+//    }
+
+//    @Test
+//    public void testFindHyponyms() {
+//        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+//        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+//        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+//
+//        Set<String> hyponyms = handler.findHyponyms(Collections.singletonList("change"));
+//        Set<String> results = Set.of("change", "alteration", "modification", "transition", "increase", "jump", "leap", "saltation", "demotion", "variation");
+//        assertThat(hyponyms).isEqualTo(results);
+//    }
+
+//    @Test
+//    public void testReversal2() {
+//        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+//        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+//        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+//
+//        Set<Integer> ids = handler.traversalBFS("act");
+//        Set<Integer> result = Set.of(6, 7, 8, 9, 10);
+//        assertThat(ids).isEqualTo(result);
+//    }
+
+//    @Test
+//    public void testFindHyponyms2() {
+//        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+//        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+//        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+//
+//        Set<String> hyponyms = handler.findHyponyms(Collections.singletonList("act"));
+//        Set<String> results = Set.of("act", "action", "change", "demotion", "human_action", "human_activity", "variation");
+//        assertThat(hyponyms).isEqualTo(results);
+//    }
 }
