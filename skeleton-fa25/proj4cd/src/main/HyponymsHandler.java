@@ -44,7 +44,9 @@ public class HyponymsHandler extends NgordnetQueryHandler {
                     count += value;
                 }
             }
-            wordCount.put(hyponym, count);
+            if (count > 0) {
+                wordCount.put(hyponym, count);
+            }
         }
 
         List<String> hyponymsList = new ArrayList<>(wordCount.keySet());

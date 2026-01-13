@@ -1,22 +1,15 @@
 import browser.NgordnetQuery;
-import browser.NgordnetQueryHandler;
 import main.HyponymsHandler;
 import main.NGramMap;
 import main.WordNet;
 import org.junit.jupiter.api.Test;
-import main.AutograderBuddy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 
-/**
- * Tests the case where the list of words is length greater than 1, but k is still zero.
- * The word history and year history files do not matter for the k==0 case, but are provided
- * as input for the constructor of the HyponymsHandler.
- */
-public class TestMultiWordK0Hyponyms {
+public class TestNonzeroKHyponyms {
     private static final String PREFIX = "./data/";
 
     /** NGrams Files */
@@ -34,51 +27,48 @@ public class TestMultiWordK0Hyponyms {
     public static final String HYPONYM_SIZE16_FILE = PREFIX + "hyponyms_size16.txt";
     public static final String SYNSET_SIZE1000_FILE = PREFIX + "synsets_size1000.txt";
     public static final String HYPONYM_SIZE1000_FILE = PREFIX +  "hyponyms_size1000.txt";
+    public static final String SYNSETS_TEST_FILE = PREFIX + "synsets_test.txt";
+    public static final String HYPONYMS_TEST_FILE = PREFIX + "hyponyms_test.txt";
 
-
-    /** This is an example from the spec.*/
     @Test
-    public void testOccurrenceAndChangeK0() {
-        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymsHandler(
-                WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE, SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
-        List<String> words = new ArrayList<>();
-        words.add("occurrence");
-        words.add("change");
-
-        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
-        String actual = studentHandler.handle(nq);
-        String expected = "[alteration, change, increase, jump, leap, modification, saltation, transition]";
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    // TODO: Add more unit tests (including edge case tests) here.
-    @Test
-    public void testNonExistInput() {
-        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
-        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+    public void testEECS() {
+        WordNet wn = new WordNet(SYNSETS_EECS_FILE, HYPONYMS_EECS_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_EECS_FILE, YEAR_HISTORY_FILE);
         HyponymsHandler handler = new HyponymsHandler(wn, ngm);
         List<String> words = new ArrayList<>();
-        words.add("aimer");
-        words.add("detester");
+        words.add("CS61A");
 
-        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2020, 4);
         String actual = handler.handle(nq);
-        String expected = "[]";
+        String expected = "[CS170, CS61A, CS61B, CS61C]";
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void testIntersection() {
-        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
-        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+    public void testK() {
+        WordNet wn = new WordNet(SYNSETS_TEST_FILE, HYPONYMS_TEST_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE4_FILE, YEAR_HISTORY_FILE);
         HyponymsHandler handler = new HyponymsHandler(wn, ngm);
         List<String> words = new ArrayList<>();
-        words.add("change");
-        words.add("alteration");
+        words.add("academic");
 
-        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2010, 2);
         String actual = handler.handle(nq);
-        String expected = "[alteration, change, increase, jump, leap, modification, saltation, transition]";
+        String expected = "[academic, below]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testNonExistWord() {
+        WordNet wn = new WordNet(SYNSETS_TEST_FILE, HYPONYMS_TEST_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE4_FILE, YEAR_HISTORY_FILE);
+        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+        List<String> words = new ArrayList<>();
+        words.add("academic");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 2010, 2010, 6);
+        String actual = handler.handle(nq);
+        String expected = "[academic, beach, below, economically]";
         assertThat(actual).isEqualTo(expected);
     }
 }

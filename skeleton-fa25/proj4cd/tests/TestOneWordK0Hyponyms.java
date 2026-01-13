@@ -50,13 +50,44 @@ public class TestOneWordK0Hyponyms {
 
     // TODO: Add more unit tests (including edge case tests) here.
     @Test
-    public void test() {
-        WordNet wn = new WordNet(SYNSETS_EECS_FILE, HYPONYMS_EECS_FILE);
-        NGramMap ngm = new NGramMap(WORD_HISTORY_EECS_FILE, YEAR_HISTORY_FILE);
+    public void testEmptyInput() {
+        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
         HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+        List<String> words = new ArrayList<>();
 
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = handler.handle(nq);
+        String expected = "[]";
+        assertThat(actual).isEqualTo(expected);
+    }
 
+    @Test
+    public void testNonExistInput() {
+        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+        List<String> words = new ArrayList<>();
+        words.add("aimer");
 
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = handler.handle(nq);
+        String expected = "[]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testPolysemousWord() {
+        WordNet wn = new WordNet(SYNSET_SIZE16_FILE, HYPONYM_SIZE16_FILE);
+        NGramMap ngm = new NGramMap(WORD_HISTORY_SIZE3_FILE, YEAR_HISTORY_FILE);
+        HyponymsHandler handler = new HyponymsHandler(wn, ngm);
+        List<String> words = new ArrayList<>();
+        words.add("change");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = handler.handle(nq);
+        String expected = "[alteration, change, demotion, increase, jump, leap, modification, saltation, transition, variation]";
+        assertThat(actual).isEqualTo(expected);
     }
 
 //    @Test

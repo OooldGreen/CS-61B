@@ -11,10 +11,9 @@ How will your program use the data?
 - result of readfile method
 
 ### IdToWord method
-- id of this word
 - wordMap:
     - Int id
-    - String word
+    - LinkedList words
 
 ### WordToId method
 - idMap:
@@ -22,8 +21,14 @@ How will your program use the data?
     - LinkedList ids
 
 ## Read file method
-- Synsets File: first column - id, second column - word
-- List of hyponyms: first column - synsets, others - hyponyms
+NOTE: columns are separated by ","
+
+- Synsets File: 
+  - first column (numbers) - id
+  - second column (strings) - words, words are separated by spaces
+- Hyponyms File: 
+  - first column (numbers) - synsets
+  - others (numbers) - hyponyms
 
 # Data Structures
 What data structures will you be using?
@@ -33,10 +38,18 @@ How will your program use the data structures?
 ## Hyponyms (Basic Case)
 - Set<String>: TreeSet -- because the list shouldn't have repeated words, alphabetical order
 
-## Graph class (Wordnet)
-- Directed graph class (adjacency list)
-    Map<Integer, Set<Integer>> wordNet (vertexId, edgeTo)
-        addEdgeTo(int v, int w)
+## Graph (Wordnet)
+- three maps:
+    HashMap<Integer, List<String>> wordMap
+        key: word id
+        value: corresponding words
+    HashMap<String, LinkedList<Integer>> idMap
+        key: word
+        value: corresponding ids
+    HashMap<Integer, Set<Integer>> wordNetMap
+        key: vertexId
+        value: edgeTo
+NOTE: one word can have several ids and vice versa.
 
 ## Read file method
 NOTE: if I use a tree, it is sorted at first but it is more slow to search; if I use a hashMap, it is faster to search
@@ -116,8 +129,8 @@ NOTE:
     Find corresponding word of each set and add to resultWordSet
 
 ### Handle k != 0:
-结果数组按照count排序，count不能为0
-接上面的代码 finding corresponding word resultWordSet：
+NOTES: result is sorted by count, count can not be 0, this means this word have not appeared during startYear and endYear. (结果数组按照count排序，count不能为0)
+Continuing from the code above, finding corresponding word resultWordSet：
 
     if k > 0:
         initialize a HashMap wordCount
@@ -219,3 +232,9 @@ space: O(K)
     Does this relate to anything we’ve already built?
 
 ## Closed Questions
+
+## Test
+- when input no word, when input a word doesn't exist in the database
+- polysemy and intersection: 多词 Synset 验证，确保查询同义词集中的任意一个词，都能得到完整的结果。
+- tie breaking for top k: K 值排序验证，看输出是否真的是降序排列后的前 K 个，且最后按字母序输出。
+- zero frequency exclusion: 出现次数为 0 的单词不予显示在结果中
